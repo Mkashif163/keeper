@@ -103,3 +103,10 @@ form.create-note button {
   cursor: pointer;
   outline: none;
 }
+
+.done {
+  background-color: #f2f2f2; 
+  text-decoration: line-through;
+  color: #ccc;
+  
+}

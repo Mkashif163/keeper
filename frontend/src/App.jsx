@@ -1,4 +1,5 @@
-import { useState } from "react";
+// App.jsx
+import { useEffect, useState } from "react";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Note from "./components/Note";
@@ -7,35 +8,38 @@ import CreateArea from "./components/CreateArea";
 function App() {
   const [notes, setNotes] = useState([]);
 
-  function addNote(newNote) {
-    setNotes(prevNotes => {
-      return [...prevNotes, newNote];
-    });
+  useEffect(() => {
+    fetchNotes();
+  }, []);
+
+  async function fetchNotes() {
+    try {
+      const response = await fetch("http://localhost:8000/todos");
+      const data = await response.json();
+      setNotes(data);
+    } catch (error) {
+      console.error("Error fetching notes:", error);
+    }
   }
 
-  function deleteNote(id) {
-    setNotes(prevNotes => {
-      return prevNotes.filter((noteItem, index) => {
-        return index !== id;
-      });
-    });
+  function handleNoteAction() {
+    fetchNotes();
   }
 
   return (
     <div>
       <Header />
-      <CreateArea onAdd={addNote} />
-      {notes.map((noteItem, index) => {
-        return (
-          <Note
-            key={index}
-            id={index}
-            title={noteItem.title}
-            content={noteItem.content}
-            onDelete={deleteNote}
-          />
-        );
-      })}
+      <CreateArea onAdd={handleNoteAction} />
+      {notes.map((noteItem, index) => (
+        <Note
+          key={index}
+          id={noteItem._id}
+          title={noteItem.title}
+          content={noteItem.description}
+          done={noteItem.done}
+          onUpdate={handleNoteAction} // Pass the handleNoteAction function to Note component
+        />
+      ))}
       <Footer />
     </div>
   );

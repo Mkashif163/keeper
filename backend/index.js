@@ -18,4 +18,6 @@ const PORT = process.env.PORT || 8000;
 
 ConnentMongo();
 
-app.listen(PORT, () => console.log(`Your server is running successfully on PORT ${PORT}`));
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
