@@ -14,7 +14,7 @@ function App() {
 
   async function fetchNotes() {
     try {
-      const response = await fetch("http://localhost:8000/todos");
+      const response = await fetch("/todos");
       const data = await response.json();
       setNotes(data);
     } catch (error) {

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useState } from "react";
 import DeleteIcon from "@material-ui/icons/Delete";
 import DoneIcon from "@material-ui/icons/Done";
@@ -7,7 +8,7 @@ function Note({ id, title, content, done, onUpdate }) {
 
   const deleteNote = async () => {
     try {
-      await fetch(`http://localhost:8000/todos/${id}`, {
+      await fetch(`/todos/${id}`, {
         method: "DELETE"
       });
       setIsDeleted(true);
@@ -18,7 +19,7 @@ function Note({ id, title, content, done, onUpdate }) {
 
   const toggleDone = async () => {
     try {
-      await fetch(`http://localhost:8000/todos/${id}`, {
+      await fetch(`/todos/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json"

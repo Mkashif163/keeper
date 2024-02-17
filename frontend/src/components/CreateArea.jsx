@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 // CreateArea.jsx
 import { useState } from "react";
 import AddIcon from "@material-ui/icons/Add";
