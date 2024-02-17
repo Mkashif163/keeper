@@ -1,68 +1,65 @@
-import todo from "../modals/todo.modal.js";
+import Todo from "../modals/todo.modal.js";
 
-export const addTodo = async (request, response) => {
+const todoController = {
+  // Get all todos
+  getAllTodos: async (req, res) => {
     try {
-        const newTodo = await todo.create({
-            data: request.body.data,
-            createdAt: Date.now()
-        })
-
-        await newTodo.save();
-
-        return response.status(200).json(newTodo);
+      const todos = await Todo.find();
+      res.json(todos);
     } catch (error) {
-        return response.status(500).json(error.message);
+      res.status(500).json({ message: error.message });
     }
-}
+  },
 
-export const getAllTodos = async (request, response) => {
+  // Create a new todo
+  createTodo: async (req, res) => {
+    const { title, description } = req.body;
+    const todo = new Todo({
+      title,
+      description,
+    });
+
     try {
-        const todos = await todo.find({}).sort({ 'createdAt': -1 })
-
-        return response.status(200).json(todos);
+      const newTodo = await todo.save();
+      res.status(201).json(newTodo);
     } catch (error) {
-        return response.status(500).json(error.message);
+      res.status(400).json({ message: error.message });
     }
-}
+  },
 
-export const toggleTodoDone = async (request, response) => {
+  // Get a single todo by ID
+  getTodoById: async (req, res) => {
     try {
-        const todoRef = await todo.findById(request.params.id);
-
-        const todo = await todo.findOneAndUpdate(
-            { _id: request.params.id },
-            { done: !todoRef.done }
-        )
-
-        await todo.save();
-
-        return response.status(200).json(todo);
+      const todo = await Todo.findById(req.params.id);
+      if (todo === null) {
+        return res.status(404).json({ message: 'Todo not found' });
+      }
+      res.json(todo);
     } catch (error) {
-        return response.status(500).json(error.message);
+      res.status(500).json({ message: error.message });
     }
-}
+  },
 
-export const updateTodo = async (request, response) => {
+  // Update a todo by ID
+  updateTodoById: async (req, res) => {
+    const { title, description, done } = req.body;
     try {
-        await todo.findOneAndUpdate(
-            { _id: request.params.id },
-            { data: request.body.data }
-        )
-
-        const todo = await todo.findById(request.params.id);
-
-        return response.status(200).json(todo);
+      const updatedTodo = await Todo.findByIdAndUpdate(req.params.id, { title, description, done }, { new: true });
+      res.json(updatedTodo);
     } catch (error) {
-        return response.status(500).json(error.message);
+      res.status(400).json({ message: error.message });
     }
-}
+  },
 
-export const deleteTodo = async (request, response) => {
+  // Delete a todo by ID
+  deleteTodoById: async (req, res) => {
     try {
-        const todo = await todo.findByIdAndDelete(request.params.id)
-
-        return response.status(200).json(todo);
+      await Todo.findByIdAndDelete(req.params.id);
+      res.json({ message: 'Todo deleted' });
     } catch (error) {
-        return response.status(500).json(error.message);
+      res.status(500).json({ message: error.message });
     }
-}
+  }
+};
+
+export default todoController;
