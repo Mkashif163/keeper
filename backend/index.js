@@ -12,7 +12,7 @@ app.use(cors());
 app.use(bodyParser.json({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true }))
 
-app.use('/', route);
+app.use('/api', route);
 
 const PORT = process.env.PORT || 8000;
 

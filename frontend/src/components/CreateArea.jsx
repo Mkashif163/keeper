@@ -20,7 +20,7 @@ function CreateArea({ onAdd }) {
 
   async function submitNote() {
     try {
-      const response = await fetch("http://localhost:8000/todos", {
+      const response = await fetch("/api/todos", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

@@ -8,7 +8,7 @@ function Note({ id, title, content, done, onUpdate }) {
 
   const deleteNote = async () => {
     try {
-      await fetch(`/todos/${id}`, {
+      await fetch(`/api/todos/${id}`, {
         method: "DELETE"
       });
       setIsDeleted(true);
@@ -19,7 +19,7 @@ function Note({ id, title, content, done, onUpdate }) {
 
   const toggleDone = async () => {
     try {
-      await fetch(`/todos/${id}`, {
+      await fetch(`/api/todos/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json"
